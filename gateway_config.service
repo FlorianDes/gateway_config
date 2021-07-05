@@ -1,0 +1,8 @@
+[Unit]
+Description=My Awesome Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=gateway_config
+Restart=on-failure

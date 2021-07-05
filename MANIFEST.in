@@ -1,0 +1,2 @@
+recursive-include src/gateway_config/templates *
+recursive-include src/gateway_config/static *

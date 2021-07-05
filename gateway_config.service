@@ -6,3 +6,6 @@ After=network.target
 Type=simple
 ExecStart=gateway_config
 Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

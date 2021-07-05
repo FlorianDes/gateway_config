@@ -56,6 +56,7 @@
                 <input type="text" class="form-control" id="altitude" name="altitude" value={{form.altitude.data}}>
             </div>
         </div>
+        <div id="map" style="height: 250px;"></div>
         <div class="form-group row">
             <label class="col-sm-2" for="contact_email">Contact email</label>
             <div class="col-sm-10">
@@ -93,5 +94,51 @@
     </div>
 </div>
 </form>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script type="text/javascript">
+    // The first parameter are the coordinates of the center of the map
+    // The second parameter is the zoom level
+    var map = L.map('map').setView([49.25, 4.03], 11);
+
+    // {s}, {z}, {x} and {y} are placeholders for map tiles
+    // {x} and {y} are the x/y of where you are on the map
+    // {z} is the zoom level
+    // {s} is the subdomain of cartodb
+    var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    });
+
+    // Now add the layer onto the map
+    map.addLayer(layer);
+
+    var markersLayer = new L.LayerGroup(); // NOTE: Layer is created here!
+    map.addLayer(markersLayer);
+    var lat = "{{ form.latitude.data }}";
+    var lng = "{{ form.longitude.data }}";
+    addMarker(lat, lng);
+
+    map.on('click', function (e) {
+        console.log(e.latlng);
+        $("#latitude").val(e.latlng['lat']);
+        $("#longitude").val(e.latlng['lng']);
+        addMarker(e.latlng['lat'], e.latlng['lng']);
+    });
+
+    $("#latitude, #longitude").on('change', function () {
+        addMarker($("#latitude").val(), $("#longitude").val());
+    })
+
+    function addMarker(lat, lng) {
+        // Add marker to map at click location; add popup window
+        markersLayer.clearLayers();
+        var newMarker = new L.marker([lat, lng]).addTo(markersLayer);
+
+    }
+
+
+</script>
 
 {% endblock %}
